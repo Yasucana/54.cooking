@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Cooking Game</title>
+  <style>
+    body { font-family: sans-serif; text-align: center; background: #fff5e1; }
+    .ingredients, .output { margin: 20px; }
+    .ingredient { padding: 10px 20px; margin: 5px; cursor: pointer; background: #f9c74f; border-radius: 5px; }
+    #selected { margin-top: 10px; font-weight: bold; }
+    #timer { font-size: 24px; margin: 10px; }
+    button { padding: 10px 20px; margin: 10px; background: #90be6d; color: white; border: none; border-radius: 5px; cursor: pointer; }
+  </style>
+</head>
+<body>
+
+  <h1>🍳 Cooking Game</h1>
+  <div class="ingredients">
+    <div class="ingredient" onclick="addIngredient('Egg')">🥚 Egg</div>
+    <div class="ingredient" onclick="addIngredient('Flour')">🌾 Flour</div>
+    <div class="ingredient" onclick="addIngredient('Milk')">🥛 Milk</div>
+    <div class="ingredient" onclick="addIngredient('Sugar')">🍬 Sugar</div>
+    <div class="ingredient" onclick="addIngredient('Butter')">🧈 Butter</div>
+  </div>
+
+  <div id="selected">Selected: (none)</div>
+  <button onclick="startCooking()">Cook!</button>
+  <div id="timer">Timer: 0s</div>
+  <div class="output" id="result"></div>
+
+  <script>
+    const recipes = {
+      'Egg,Flour,Milk': '🥞 Pancake',
+      'Egg,Milk,Sugar': '🍮 Custard',
+      'Flour,Sugar,Butter': '🍪 Cookie'
+    };
+    let selected = [];
+    let timer = 0;
+    let interval;
+
+    function addIngredient(name) {
+      if (selected.length < 3) {
+        selected.push(name);
+        document.getElementById('selected').innerText = 'Selected: ' + selected.join(', ');
+      }
+    }
+
+    function startCooking() {
+      if (selected.length !== 3) {
+        alert('Select exactly 3 ingredients!');
+        return;
+      }
+      timer = 0;
+      document.getElementById('timer').innerText = 'Timer: 0s';
+      document.getElementById('result').innerText = '';
+      interval = setInterval(() => {
+        timer++;
+        document.getElementById('timer').innerText = 'Timer: ' + timer + 's';
+        if (timer === 5) finishCooking();
+      }, 1000);
+    }
+
+    function finishCooking() {
+      clearInterval(interval);
+      const key = selected.sort().join(',');
+      const dish = recipes[key];
+      document.getElementById('result').innerText = dish ? `You made: ${dish}` : '🍲 Unknown dish!';
+      selected = [];
+      document.getElementById('selected').innerText = 'Selected: (none)';
+    }
+  </script>
+
+</body>
+</html>
